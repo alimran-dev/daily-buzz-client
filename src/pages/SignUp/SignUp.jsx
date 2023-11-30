@@ -24,41 +24,48 @@ const SignUp = () => {
     const email = form.email.value;
     const password = form.password.value;
     const photo = form.photo.files[0];
-    const user = { name, email, password, photo };
-    console.log(user);
-    axios
-      .post(
-        `https://api.imgbb.com/1/upload?key=${imgKey}`,
-        { image: photo },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        if (res.data?.success) {
-          signUp(email, password)
-            .then((result) => {
-              console.log(result.user);
-              updateUser(name, res?.data?.data?.display_url)
-                .then(() => {
-                  setUser(auth.currentUser);
-                  setIsLoading(false);
-                })
-                .catch((error) => {
-                  console.log(error);
-                  setIsLoading(false);
-                });
-            })
-            .catch((error) => {
-              console.error(error);
-              setIsLoading(false);
-            });
-        }
-      })
-      .catch((error) => console.log(error));
+    // eslint-disable-next-line no-useless-escape
+    const regex = /^(.{0,5}|[^A-Z]*|[^!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]*|\D*)$/;
+    if (regex.test(password)) {
+      setError(
+        "Password must have minimum 6 character,a capital letter,a special character and a number"
+      );
+      setIsLoading(false);
+    } else {
+      axios
+        .post(
+          `https://api.imgbb.com/1/upload?key=${imgKey}`,
+          { image: photo },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data?.success) {
+            signUp(email, password)
+              .then((result) => {
+                console.log(result.user);
+                updateUser(name, res?.data?.data?.display_url)
+                  .then(() => {
+                    setUser(auth.currentUser);
+                    setIsLoading(false);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    setIsLoading(false);
+                  });
+              })
+              .catch((error) => {
+                console.error(error);
+                setIsLoading(false);
+              });
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   };
   const handleGoogle = () => {
     googleLogin()
@@ -68,8 +75,8 @@ const SignUp = () => {
       .catch((error) => {
         console.error(error);
       });
-    };
-    console.log(user);
+  };
+  console.log(user);
   return (
     <div>
       <Loader isLoading={isLoading} />
@@ -135,8 +142,15 @@ const SignUp = () => {
           <label htmlFor="photo" className="block font-medium">
             Profile Picture<span className="text-red-400">*</span>
           </label>
-          <input type="file" name="photo" className="" required accept="" />
+          <input
+            type="file"
+            name="photo"
+            className=""
+            required
+            accept=".jpg, .jpeg, .png"
+          />
         </div>
+        <p className="text-center text-red-500 font-medium">{error}</p>
         <button
           type="submit"
           className="bg-[#746C2E] text-white py-1.5 px-5 font-medium rounded block mx-auto"
