@@ -12,7 +12,7 @@ const SignUp = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { googleLogin, signUp, updateUser, setUser, auth } =
+  const { user, googleLogin, signUp, updateUser, setUser, auth } =
     useContext(AuthContext);
 
   const handleSignUp = (e) => {
@@ -68,7 +68,8 @@ const SignUp = () => {
       .catch((error) => {
         console.error(error);
       });
-  };
+    };
+    console.log(user);
   return (
     <div>
       <Loader isLoading={isLoading} />
