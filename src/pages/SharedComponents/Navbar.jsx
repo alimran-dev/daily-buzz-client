@@ -30,7 +30,7 @@ const Navbar = () => {
     const pages = [
         {item: "Home",itemUrl:"/"},
         {item: "Add Articles",itemUrl:"/addArticles"},
-        {item: "All Articles",itemUrl:"/blog"},
+        {item: "All Articles",itemUrl:"/allArticles"},
         {item: "Subscription",itemUrl:"/blog"},
         {item: "Premium Articles",itemUrl:"/blog"},
     ];
