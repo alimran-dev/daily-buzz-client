@@ -32,7 +32,7 @@ const Navbar = () => {
         {item: "Add Articles",itemUrl:"/addArticles"},
         {item: "All Articles",itemUrl:"/allArticles"},
         {item: "Subscription",itemUrl:"/blog"},
-        {item: "Premium Articles",itemUrl:"/blog"},
+        {item: "Premium Articles",itemUrl:"/premiumArticles"},
     ];
 
   const handleOpenNavMenu = (event) => {

@@ -7,6 +7,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import AddArticles from "../pages/AddArticles/AddArticles";
 import AllArticles from "../pages/AllArticles/AllArticles";
 import ArticleDetails from "../pages/ArticleDetails/ArticleDetails";
+import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             {
                 path: '/details/:id',
                 element: <ArticleDetails />,
+            },
+            {
+                path: '/premiumArticles',
+                element: <PremiumArticles />,
             }
         ]
     }
