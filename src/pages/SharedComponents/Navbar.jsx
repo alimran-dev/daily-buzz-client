@@ -31,7 +31,7 @@ const Navbar = () => {
         {item: "Home",itemUrl:"/"},
         {item: "Add Articles",itemUrl:"/addArticles"},
         {item: "All Articles",itemUrl:"/allArticles"},
-        {item: "Subscription",itemUrl:"/blog"},
+        {item: "Subscription",itemUrl:"/subscription"},
         {item: "Premium Articles",itemUrl:"/premiumArticles"},
     ];
 

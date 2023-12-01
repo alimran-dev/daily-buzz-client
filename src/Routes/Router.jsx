@@ -8,6 +8,7 @@ import AddArticles from "../pages/AddArticles/AddArticles";
 import AllArticles from "../pages/AllArticles/AllArticles";
 import ArticleDetails from "../pages/ArticleDetails/ArticleDetails";
 import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
+import Subscription from "../pages/Subscription/Subscription";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             {
                 path: '/details/:id',
                 element: <ArticleDetails />,
+            },
+            {
+                path: '/subscription',
+                element: <Subscription />,
             },
             {
                 path: '/premiumArticles',
