@@ -28,8 +28,8 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const pages = [
-        {item: "Home",itemUrl:"/products"},
-        {item: "Add Articles",itemUrl:"/pricing"},
+        {item: "Home",itemUrl:"/"},
+        {item: "Add Articles",itemUrl:"/addArticles"},
         {item: "All Articles",itemUrl:"/blog"},
         {item: "Subscription",itemUrl:"/blog"},
         {item: "Premium Articles",itemUrl:"/blog"},
