@@ -1,6 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import banner from "../../assets/subscription-banner.jpg";
 
 const Subscription = () => {
+  const navigate = useNavigate();
+  const handleSubscription = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const plan = form.plan.value;
+    navigate("/payment", { state: plan });
+  };
   return (
     <div className="my-10">
       <div className="w-full h-[550px] relative rounded-md">
@@ -68,14 +76,23 @@ const Subscription = () => {
               </ul>
             </div>
           </div>
-              </div>
-              <h3 className="text-3xl font-bold text-center bg-gradient-to-b from-[#746C2E] to-[#746c2eaf] text-transparent bg-clip-text py-5">Choose Your Plan</h3>
-              <select className="border px-5 py-2 block mx-auto">
-                  <option value="1">1$ for 1 minute [for assignment]</option>
-                  <option value="1">10$ for 1 month</option>
-                  <option value="1">80$ for 1 year</option>
-              </select>
-              <button className="bg-[#746C2E] py-1.5 px-3 text-white font-medium rounded block mx-auto mt-5">Purchase</button>
+        </div>
+        <form onSubmit={handleSubscription}>
+          <h3 className="text-3xl font-bold text-center bg-gradient-to-b from-[#746C2E] to-[#746c2eaf] text-transparent bg-clip-text py-5">
+            Choose Your Plan
+          </h3>
+          <select name="plan" className="border px-5 py-2 block mx-auto">
+            <option value="1">1$ for 1 minute [for assignment]</option>
+            <option value="10">10$ for 1 month</option>
+            <option value="80">80$ for 1 year</option>
+          </select>
+          <button
+            type="submit"
+            className="bg-[#746C2E] py-1.5 px-3 text-white font-medium rounded block mx-auto mt-5"
+          >
+            Purchase
+          </button>
+        </form>
       </div>
     </div>
   );
