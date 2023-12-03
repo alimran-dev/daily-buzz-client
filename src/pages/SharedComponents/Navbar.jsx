@@ -10,42 +10,45 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 
-
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const settings = [
-  {item: "Profile",itemUrl: "/profile"},
-  {item: "Account",itemUrl: "/account"},
-  {item: "Dashboard",itemUrl: "/dashboard"},
-]
+  { item: "My Profile", itemUrl: "/myProfile" },
+  { item: "My Articles", itemUrl: "/myArticles" },
+];
 
-const LoggedNav=[
-  {item: "Home",itemUrl:"/"},
-  {item: "Add Articles",itemUrl:"/addArticles"},
-  {item: "All Articles",itemUrl:"/allArticles"},
-  {item: "Subscription",itemUrl:"/subscription"},
-  {item: "Premium Articles",itemUrl:"/premiumArticles"},
+const LoggedNav = [
+  { item: "Home", itemUrl: "/" },
+  { item: "Add Articles", itemUrl: "/addArticles" },
+  { item: "All Articles", itemUrl: "/allArticles" },
+  { item: "Subscription", itemUrl: "/subscription" },
+  { item: "Premium Articles", itemUrl: "/premiumArticles" },
 ];
 const nav = [
-  {item: "Home",itemUrl: "/"},
-  {item: "All Articles",itemUrl: "/allArticles"},
+  { item: "Home", itemUrl: "/" },
+  { item: "All Articles", itemUrl: "/allArticles" },
   // {item: "All Articles",itemUrl: "/allArticles"},
-]
+];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
-  
-  const {user,logOut} = useContext(AuthContext);
 
-    const pages = user?LoggedNav:nav;
+  const { user, logOut } = useContext(AuthContext);
 
+  const pages = user ? LoggedNav : nav;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAnchorElUser(null)
+    },1)
+  },[user])
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -59,32 +62,32 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-    };
-    const handleNavLink = (itemUrl) => {
-        navigate(itemUrl);
-        setAnchorElNav(null);
-  }
+  };
+  const handleNavLink = (itemUrl) => {
+    navigate(itemUrl);
+    setAnchorElNav(null);
+  };
   const handleLogout = () => {
     logOut()
       .then(() => {
-        navigate('/');
+        navigate("/");
         Swal.fire({
           position: "center",
           icon: "success",
           title: "Logout successful",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
       })
-    .catch(error=>console.log(error))
-  }
+      .catch((error) => console.log(error));
+  };
   return (
     <div>
       <AppBar position="static" color="transparent">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{display: {xs: "none", md: "flex"}}}>
-                      <img src={logo} alt="" className="h-16 my-2" />
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <img src={logo} alt="" className="h-16 my-2" />
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -117,60 +120,95 @@ const Navbar = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page.item} onClick={()=>handleNavLink(page.itemUrl)}>
+                  <MenuItem
+                    key={page.item}
+                    onClick={() => handleNavLink(page.itemUrl)}
+                  >
                     <Typography textAlign="center">{page.item}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
-            <Box sx={{flexGrow: 1,display: {xs: "flex", md: "none"}}}>
-                      <img src={logo} alt="" className="h-16 my-2" />
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <img src={logo} alt="" className="h-16 my-2" />
             </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, justifyContent:"center" }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+              }}
+            >
               {pages.map((page) => (
                 <Button
                   key={page.item}
-                  onClick={()=>handleNavLink(page.itemUrl)}
-                  sx={{ my: 2,mx:1, color: "#131313", display: "block",fontSize:"14px" ,fontWeight:"600" }}
+                  onClick={() => handleNavLink(page.itemUrl)}
+                  sx={{
+                    my: 2,
+                    mx: 1,
+                    color: "#131313",
+                    display: "block",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                  }}
                 >
                   {page.item}
                 </Button>
               ))}
             </Box>
 
-            {user?<Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+            {user ? (
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={user?.photoURL}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem
+                      key={setting.item}
+                      onClick={() => {
+                        navigate(setting.itemUrl);
+                        setAnchorElUser(null);
+                      }}
+                    >
+                      <Typography textAlign="center">{setting.item}</Typography>
+                    </MenuItem>
+                  ))}
+                  {user && (
+                    <MenuItem onClick={handleLogout}>
+                      <button>Log Out</button>
+                    </MenuItem>
+                  )}
+                </Menu>
+              </Box>
+            ) : (
+              <Link
+                to={"/login"}
+                className="bg-[#746C2E] py-1.5 px-5 font-semibold text-white rounded"
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting.item} onClick={()=>navigate(setting.itemUrl)}>
-                    <Typography textAlign="center">{setting.item}</Typography>
-                  </MenuItem>
-                ))}
-                {
-                  user && <MenuItem onClick={handleLogout}><button>Log Out</button></MenuItem>
-                }
-              </Menu>
-            </Box>:<Link to={'/login'} className="bg-[#746C2E] py-1.5 px-5 font-semibold text-white rounded">Login</Link>}
-            
+                Login
+              </Link>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
