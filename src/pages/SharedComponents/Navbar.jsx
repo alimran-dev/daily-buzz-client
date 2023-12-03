@@ -10,30 +10,41 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import logo from "../../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
-// const pages = ["Products", "Pricing", "Blog"];
-// const pages = [
-//     {item: "Products",itemUrl:"/products"},
-//     {item: "Pricing",itemUrl:"/pricing"},
-//     {item: "Blog",itemUrl:"/blog"},
-// ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+// const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  {item: "Profile",itemUrl: "/profile"},
+  {item: "Account",itemUrl: "/account"},
+  {item: "Dashboard",itemUrl: "/dashboard"},
+]
+
+const LoggedNav=[
+  {item: "Home",itemUrl:"/"},
+  {item: "Add Articles",itemUrl:"/addArticles"},
+  {item: "All Articles",itemUrl:"/allArticles"},
+  {item: "Subscription",itemUrl:"/subscription"},
+  {item: "Premium Articles",itemUrl:"/premiumArticles"},
+];
+const nav = [
+  {item: "Home",itemUrl: "/"},
+  {item: "All Articles",itemUrl: "/allArticles"},
+  // {item: "All Articles",itemUrl: "/allArticles"},
+]
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  
+  const {user,logOut} = useContext(AuthContext);
 
-    const pages = [
-        {item: "Home",itemUrl:"/"},
-        {item: "Add Articles",itemUrl:"/addArticles"},
-        {item: "All Articles",itemUrl:"/allArticles"},
-        {item: "Subscription",itemUrl:"/subscription"},
-        {item: "Premium Articles",itemUrl:"/premiumArticles"},
-    ];
+    const pages = user?LoggedNav:nav;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -52,7 +63,21 @@ const Navbar = () => {
     const handleNavLink = (itemUrl) => {
         navigate(itemUrl);
         setAnchorElNav(null);
-    }
+  }
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        navigate('/');
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Logout successful",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      })
+    .catch(error=>console.log(error))
+  }
   return (
     <div>
       <AppBar position="static" color="transparent">
@@ -113,7 +138,7 @@ const Navbar = () => {
               ))}
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            {user?<Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -136,12 +161,16 @@ const Navbar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                  <MenuItem key={setting.item} onClick={()=>navigate(setting.itemUrl)}>
+                    <Typography textAlign="center">{setting.item}</Typography>
                   </MenuItem>
                 ))}
+                {
+                  user && <MenuItem onClick={handleLogout}><button>Log Out</button></MenuItem>
+                }
               </Menu>
-            </Box>
+            </Box>:<Link to={'/login'} className="bg-[#746C2E] py-1.5 px-5 font-semibold text-white rounded">Login</Link>}
+            
           </Toolbar>
         </Container>
       </AppBar>
