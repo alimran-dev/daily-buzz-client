@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import axios from "axios";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const animatedComponents = makeAnimated();
 const tags = [
@@ -32,6 +35,7 @@ const AddArticles = () => {
   const tagsValue = [];
   const publishersOption = [];
   const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
 
   const handleAddArticle = (e) => {
     e.preventDefault();
@@ -48,6 +52,43 @@ const AddArticles = () => {
       photo,
       description
     );
+    axios
+      .post(
+        `https://api.imgbb.com/1/upload?key=${imgKey}`,
+        { image: photo },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success) {
+          axiosSecure
+            .post("/articles", {
+              title,
+              publisher: selectedPublisherValue,
+              tags: selectedTagValues,
+              photo: res?.data?.data?.display_url,
+              description,
+              author_name: user?.displayName,
+              author_email: user?.email,
+              author_photo: user?.photoURL,
+            })
+            .then((res) => {
+              console.log(res.data);
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Article submitted for approval",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              form.reset();
+            });
+        }
+      });
   };
   publishers?.forEach((publisher) =>
     publishersOption.push({ value: publisher, label: publisher })
