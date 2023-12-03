@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const ArticleCard = ({ article }) => {
+  const navigate = useNavigate();
   const { _id, img, title, publisher, description } = article || {};
   // console.log(_id)
   return (
@@ -27,7 +29,7 @@ const ArticleCard = ({ article }) => {
             ? `${description.split(" ").slice(0, 40).join(" ")}.....`
             : description}
         </p>
-        <button className="bg-[#746C2E] w-fit px-3 py-1 text-white font-medium rounded">
+        <button onClick={()=>navigate(`/details/${_id}`)} className="bg-[#746C2E] w-fit px-3 py-1 text-white font-medium rounded">
           Details
         </button>
       </div>
