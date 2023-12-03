@@ -15,6 +15,7 @@ import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const settings = [
@@ -39,16 +40,21 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const { user, logOut } = useContext(AuthContext);
 
   const pages = user ? LoggedNav : nav;
 
   useEffect(() => {
+    axiosSecure.patch('/subscription',{ email: user?.email, plan: 0})
+          .then(res => {
+            console.log(res.data);
+          })
     setTimeout(() => {
       setAnchorElUser(null)
     },1)
-  },[user])
+  },[axiosSecure, user])
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };

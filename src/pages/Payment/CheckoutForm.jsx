@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../providers/AuthProvider";
 import PropTypes from "prop-types";
+import Swal from "sweetalert2";
 
 const CheckoutForm = ({ price }) => {
   const [error, setError] = useState();
@@ -49,6 +50,17 @@ const CheckoutForm = ({ price }) => {
       console.log("payment intent", paymentIntent);
       if (paymentIntent.status === "succeeded") {
         console.log("transaction id", paymentIntent.id);
+        axiosSecure.patch('/subscription',{ email: user?.email, plan: price})
+          .then(res => {
+            console.log(res.data);
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `Subscription purchased with ${price}`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+          })
       }
     }
   };
@@ -59,7 +71,7 @@ const CheckoutForm = ({ price }) => {
         setClientSecret(res.data.clientSecret);
       })
       .catch((error) => console.log(error));
-  }, [axiosSecure, price]);
+  }, [axiosSecure, price, user?.email]);
 
   console.log(price);
   return (

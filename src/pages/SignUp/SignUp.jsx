@@ -5,12 +5,14 @@ import { IoLogoGoogle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Loader from "../../components/Loader";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const imgKey = import.meta.env.VITE_IMG_KEY;
 const SignUp = () => {
   const [eye, setEye] = useState(true);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const axiosPublic = useAxiosPublic();
 
   const { user, googleLogin, signUp, updateUser, setUser, auth } =
     useContext(AuthContext);
@@ -51,7 +53,11 @@ const SignUp = () => {
                 updateUser(name, res?.data?.data?.display_url)
                   .then(() => {
                     setUser(auth.currentUser);
-                    setIsLoading(false);
+                    axiosPublic.post('/users',{name,email,photo:res?.data?.data?.display_url})
+                      .then(res => {
+                      console.log("user created",res.data);
+                        setIsLoading(false);
+                    })
                   })
                   .catch((error) => {
                     console.log(error);

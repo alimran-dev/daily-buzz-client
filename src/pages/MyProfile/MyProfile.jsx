@@ -3,6 +3,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Swal from "sweetalert2";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const imgKey = import.meta.env.VITE_IMG_KEY;
 
@@ -13,6 +14,7 @@ const MyProfile = () => {
   const [passError, setPassError] = useState(null);
   const { user, updateUser, loginUser, updatePass } = useContext(AuthContext);
   const { displayName, email, photoURL } = user || {};
+  const axiosSecure = useAxiosSecure();
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -37,13 +39,18 @@ const MyProfile = () => {
             updateUser(name, res?.data?.data?.display_url)
               .then(() => {
                 window.location.reload();
-                Swal.fire({
-                  position: "center",
-                  icon: "success",
-                  title: "Updated Successfully",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
+                axiosSecure
+                  .patch("/userUpdate", { name, email, photoURL })
+                  .then((res) => {
+                    console.log(res.data);
+                    Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: "Updated Successfully",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  });
               })
               .catch((error) => console.log(error));
           }
@@ -52,13 +59,18 @@ const MyProfile = () => {
     } else {
       updateUser(name, photoURL)
         .then(() => {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Updated Successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          axiosSecure
+            .patch("/userUpdate", { name, email, photoURL })
+            .then((res) => {
+              console.log(res.data);
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Updated Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            });
         })
         .catch((error) => console.log(error));
     }
