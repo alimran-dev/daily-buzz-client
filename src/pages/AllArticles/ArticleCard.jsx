@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import useIsPremium from "../../hooks/useIsPremium";
 
 const ArticleCard = ({ article }) => {
   const navigate = useNavigate();
+  const premiumCheck = useIsPremium();
   const { _id, img, title, publisher, description,isPremium } = article || {};
-  // console.log(isPremium)
+  console.log(premiumCheck)
   return (
     <div className="flex flex-col">
       <div className="w-ful relative">
@@ -29,7 +31,7 @@ const ArticleCard = ({ article }) => {
             ? `${description.split(" ").slice(0, 40).join(" ")}.....`
             : description}
         </p>
-        <button onClick={()=>navigate(`/details/${_id}`)} className="bg-[#746C2E] w-fit px-3 py-1 text-white font-medium rounded">
+        <button onClick={()=>navigate(`/details/${_id}`)} className="bg-[#746C2E] w-fit px-3 py-1 text-white font-medium rounded disabled:bg-opacity-60" disabled={isPremium && !premiumCheck}>
           Details
         </button>
       </div>
