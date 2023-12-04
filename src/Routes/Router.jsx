@@ -13,6 +13,7 @@ import Payment from "../pages/Payment/Payment";
 import PrivateRoutes from "../providers/PrivateRoutes";
 import MyProfile from "../pages/MyProfile/MyProfile";
 import MyArticles from "../pages/MyArticles/MyArticles";
+import Update from "../pages/Update/Update";
 
 const router = createBrowserRouter([
     {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
             {
                 path: '/myArticles',
                 element: <MyArticles />,
+            },
+            {
+                path: '/update/:id',
+                element: <Update />,
             }
         ]
     }
