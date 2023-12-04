@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoLogoGoogle } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Loader from "../../components/Loader";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -13,6 +13,8 @@ const SignUp = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
+  const { state} = useLocation();
 
   const { user, googleLogin, signUp, updateUser, setUser, auth } =
     useContext(AuthContext);
@@ -55,7 +57,13 @@ const SignUp = () => {
                     setUser(auth.currentUser);
                     axiosPublic.post('/users',{name,email,photo:res?.data?.data?.display_url})
                       .then(res => {
-                      console.log("user created",res.data);
+                        console.log("user created", res.data);
+                        if (state) {
+                          navigate(state);
+                        }
+                        else {
+                          navigate('/');
+                        }
                         setIsLoading(false);
                     })
                   })
@@ -77,6 +85,12 @@ const SignUp = () => {
     googleLogin()
       .then((result) => {
         console.log(result.user);
+        if (state) {
+          navigate(state);
+        }
+        else {
+          navigate('/');
+        }
       })
       .catch((error) => {
         console.error(error);

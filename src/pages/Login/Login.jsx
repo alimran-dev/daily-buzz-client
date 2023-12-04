@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { IoLogoGoogle, IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Loader from "../../components/Loader";
 
@@ -9,6 +9,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { loginUser, setUser, googleLogin } = useContext(AuthContext);
   const handleLogin = (e) => {
     e.preventDefault();
@@ -22,7 +23,12 @@ const Login = () => {
       .then((result) => {
         setUser(result);
         setIsLoading(false);
-        navigate('/')
+        if (state) {
+          navigate(state);
+        }
+        else {
+          navigate('/');
+        }
       })
       .catch((error) => {
         console.error(error.message);
@@ -35,7 +41,12 @@ const Login = () => {
     googleLogin()
       .then((result) => {
         console.log(result.user);
-        navigate("/");
+        if (state) {
+          navigate(state);
+        }
+        else {
+          navigate('/');
+        }
       })
       .catch((error) => {
         console.error(error);
