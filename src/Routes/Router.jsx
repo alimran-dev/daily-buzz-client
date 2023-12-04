@@ -43,31 +43,31 @@ const router = createBrowserRouter([
             },
             {
                 path: '/details/:id',
-                element: <ArticleDetails />,
+                element: <PrivateRoutes><ArticleDetails /></PrivateRoutes>,
             },
             {
                 path: '/subscription',
-                element: <Subscription />,
+                element: <PrivateRoutes><Subscription /></PrivateRoutes>,
             },
             {
                 path: '/premiumArticles',
-                element: <PremiumArticles />,
+                element: <PrivateRoutes><PremiumArticles /></PrivateRoutes>,
             },
             {
                 path: '/payment',
-                element: <Payment />
+                element: <PrivateRoutes><Payment /></PrivateRoutes>
             },
             {
                 path: '/myProfile',
-                element: <MyProfile />,
+                element: <PrivateRoutes><MyProfile /></PrivateRoutes>,
             },
             {
                 path: '/myArticles',
-                element: <MyArticles />,
+                element: <PrivateRoutes><MyArticles /></PrivateRoutes>,
             },
             {
                 path: '/update/:id',
-                element: <Update />,
+                element: <PrivateRoutes><Update /></PrivateRoutes>,
             }
         ]
     }

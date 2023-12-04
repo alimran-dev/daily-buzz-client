@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const ArticleCard = ({ article }) => {
   const navigate = useNavigate();
-  const { _id, img, title, publisher, description } = article || {};
-  // console.log(_id)
+  const { _id, img, title, publisher, description,isPremium } = article || {};
+  // console.log(isPremium)
   return (
     <div className="flex flex-col">
       <div className="w-ful relative">
@@ -20,7 +20,7 @@ const ArticleCard = ({ article }) => {
           </h2>
         </div>
       </div>
-      <div className="bg-slate-50 p-3 space-y-3 border flex-grow flex flex-col justify-between">
+      <div className={`p-3 space-y-3 border flex-grow flex flex-col justify-between ${isPremium?"bg-red-200":"bg-slate-50"}`}>
         <p className="bg-gray-300 w-fit px-2 py-1 font-semibold rounded my-2 text-xs">
           {publisher}
         </p>
