@@ -14,6 +14,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import MyProfile from "../pages/MyProfile/MyProfile";
 import MyArticles from "../pages/MyArticles/MyArticles";
 import Update from "../pages/Update/Update";
+import Dashboard from "../pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
-  },
+    },
+    {
+        path: '/dashboard',
+        element: <Dashboard />
+    }
 ]);
 export default router;

@@ -17,9 +17,15 @@ import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useIsPremium from "../../hooks/useIsPremium";
+import useAdmin from "../../hooks/useAdmin";
 
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const settings = [
+  { item: "My Profile", itemUrl: "/myProfile" },
+  { item: "My Articles", itemUrl: "/myArticles" },
+];
+const adminSettings = [
+  { item: "Dashboard", itemUrl: "/dashboard" },
   { item: "My Profile", itemUrl: "/myProfile" },
   { item: "My Articles", itemUrl: "/myArticles" },
 ];
@@ -47,27 +53,24 @@ const nav = [
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [pages, setPages] = useState(nav);
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const premiumCheck = useIsPremium();
+  const [isAdmin, isAdminLoading] = useAdmin();
+  console.log(isAdmin);
 
   const { user, logOut } = useContext(AuthContext);
 
   useEffect(() => {
-    setPages(user && premiumCheck ? LoggedNavPrem : user ? navLog : nav);
-  },[premiumCheck, user])
-  // const pages = user && premiumCheck ? LoggedNavPrem:user? navLog:nav;
-
-  useEffect(() => {
-    axiosSecure.patch('/subscription',{ email: user?.email, plan: 0})
-          .then(res => {
-            console.log(res.data);
-          })
+    axiosSecure
+      .patch("/subscription", { email: user?.email, plan: 0 })
+      .then((res) => {
+        console.log(res.data);
+      });
     setTimeout(() => {
-      setAnchorElUser(null)
-    },1)
-  },[axiosSecure, user])
+      setAnchorElUser(null);
+    }, 1);
+  }, [axiosSecure, user]);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -138,14 +141,26 @@ const Navbar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem
-                    key={page.item}
-                    onClick={() => handleNavLink(page.itemUrl)}
-                  >
-                    <Typography textAlign="center">{page.item}</Typography>
-                  </MenuItem>
-                ))}
+                {user &&
+                  premiumCheck &&
+                  LoggedNavPrem.map((page) => (
+                    <MenuItem
+                      key={page.item}
+                      onClick={() => handleNavLink(page.itemUrl)}
+                    >
+                      <Typography textAlign="center">{page.item}</Typography>
+                    </MenuItem>
+                  ))}
+                {user &&
+                  !premiumCheck &&
+                  navLog.map((page) => (
+                    <MenuItem
+                      key={page.item}
+                      onClick={() => handleNavLink(page.itemUrl)}
+                    >
+                      <Typography textAlign="center">{page.item}</Typography>
+                    </MenuItem>
+                  ))}
               </Menu>
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -158,32 +173,66 @@ const Navbar = () => {
                 justifyContent: "center",
               }}
             >
-              {pages.map((page) => (
-                <Button
-                  key={page.item}
-                  onClick={() => handleNavLink(page.itemUrl)}
-                  sx={{
-                    my: 2,
-                    mx: 1,
-                    color: "#131313",
-                    display: "block",
-                    fontSize: "14px",
-                    fontWeight: "600",
-                  }}
-                >
-                  {page.item}
-                </Button>
-              ))}
+              {user &&
+                premiumCheck &&
+                LoggedNavPrem.map((page) => (
+                  <Button
+                    key={page.item}
+                    onClick={() => handleNavLink(page.itemUrl)}
+                    sx={{
+                      my: 2,
+                      mx: 1,
+                      color: "#131313",
+                      display: "block",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {page.item}
+                  </Button>
+                ))}
+              {user &&
+                !premiumCheck &&
+                navLog.map((page) => (
+                  <Button
+                    key={page.item}
+                    onClick={() => handleNavLink(page.itemUrl)}
+                    sx={{
+                      my: 2,
+                      mx: 1,
+                      color: "#131313",
+                      display: "block",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {page.item}
+                  </Button>
+                ))}
+              {!user &&
+                nav.map((page) => (
+                  <Button
+                    key={page.item}
+                    onClick={() => handleNavLink(page.itemUrl)}
+                    sx={{
+                      my: 2,
+                      mx: 1,
+                      color: "#131313",
+                      display: "block",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {page.item}
+                  </Button>
+                ))}
             </Box>
 
             {user ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={user?.photoURL}
-                    />
+                    <Avatar alt="Remy Sharp" src={user?.photoURL} />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -202,17 +251,34 @@ const Navbar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting.item}
-                      onClick={() => {
-                        navigate(setting.itemUrl);
-                        setAnchorElUser(null);
-                      }}
-                    >
-                      <Typography textAlign="center">{setting.item}</Typography>
-                    </MenuItem>
-                  ))}
+                  {!isAdmin &&
+                    settings.map((setting) => (
+                      <MenuItem
+                        key={setting.item}
+                        onClick={() => {
+                          navigate(setting.itemUrl);
+                          setAnchorElUser(null);
+                        }}
+                      >
+                        <Typography textAlign="center">
+                          {setting.item}
+                        </Typography>
+                      </MenuItem>
+                    ))}
+                  {isAdmin &&
+                    adminSettings.map((setting) => (
+                      <MenuItem
+                        key={setting.item}
+                        onClick={() => {
+                          navigate(setting.itemUrl);
+                          setAnchorElUser(null);
+                        }}
+                      >
+                        <Typography textAlign="center">
+                          {setting.item}
+                        </Typography>
+                      </MenuItem>
+                    ))}
                   {user && (
                     <MenuItem onClick={handleLogout}>
                       <button>Log Out</button>

@@ -5,9 +5,10 @@ import { AuthContext } from "../providers/AuthProvider";
 
 const useIsPremium = () => {
     const axiosSecure = useAxiosSecure();
-    const {user} = useContext(AuthContext);
+    const {user,loading} = useContext(AuthContext);
     const { data } = useQuery({
         queryKey: ['isPremium'],
+        enabled: !loading,
         queryFn: async () => {
             const res = await axiosSecure.get(`/user?email=${user?.email}`);
             return res.data;
