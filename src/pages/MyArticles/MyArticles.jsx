@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import ArticleRow from "./ArticleRow";
+import Modal from "./Modal";
 
 const MyArticles = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [feedback, setFeedback] = useState('');
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const {data,refetch} = useQuery({
@@ -18,6 +21,7 @@ const MyArticles = () => {
     console.log(data)
     return (
         <div>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} feedback={feedback} />
             <h1 className="text-4xl font-bold text-center bg-gradient-to-b from-[#746C2E] to-[#746c2eaf] text-transparent bg-clip-text py-8">
         My Articles
             </h1>
@@ -54,7 +58,7 @@ const MyArticles = () => {
                             <td className="border flex items-center justify-center"><button className="bg-[#746C2E] py-1.5 px-3 font-semibold text-white rounded">Details</button></td>
                         </tr> */}
                         {
-                            data?.map((article, idx) => <ArticleRow key={article._id} article={article} id={idx + 1} refetch={refetch} />)
+                            data?.map((article, idx) => <ArticleRow key={article._id} article={article} id={idx + 1} refetch={refetch} setIsOpen={setIsOpen} setFeedback={setFeedback} />)
                         }
                     </tbody>
                 </table>
