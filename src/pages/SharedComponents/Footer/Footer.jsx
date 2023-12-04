@@ -19,7 +19,7 @@ const quickLinks = [
 ];
 
 const Footer = () => {
-  const footerStyle = { boxShadow: "0px 0px 10px gray" };
+  const footerStyle = { boxShadow: "0px 0px 10px gray",marginTop:'50px' };
   return (
     <div style={footerStyle}>
       <div className="grid md:grid-cols-4 gap-5 p-12">

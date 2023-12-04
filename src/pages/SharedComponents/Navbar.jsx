@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useIsPremium from "../../hooks/useIsPremium";
 
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const settings = [
@@ -23,7 +24,14 @@ const settings = [
   { item: "My Articles", itemUrl: "/myArticles" },
 ];
 
-const LoggedNav = [
+const navLog = [
+  { item: "Home", itemUrl: "/" },
+  { item: "Add Articles", itemUrl: "/addArticles" },
+  { item: "All Articles", itemUrl: "/allArticles" },
+  { item: "Subscription", itemUrl: "/subscription" },
+  // { item: "Premium Articles", itemUrl: "/premiumArticles" },
+];
+const LoggedNavPrem = [
   { item: "Home", itemUrl: "/" },
   { item: "Add Articles", itemUrl: "/addArticles" },
   { item: "All Articles", itemUrl: "/allArticles" },
@@ -39,12 +47,17 @@ const nav = [
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [pages, setPages] = useState(nav);
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const premiumCheck = useIsPremium();
 
   const { user, logOut } = useContext(AuthContext);
 
-  const pages = user ? LoggedNav : nav;
+  useEffect(() => {
+    setPages(user && premiumCheck ? LoggedNavPrem : user ? navLog : nav);
+  },[premiumCheck, user])
+  // const pages = user && premiumCheck ? LoggedNavPrem:user? navLog:nav;
 
   useEffect(() => {
     axiosSecure.patch('/subscription',{ email: user?.email, plan: 0})

@@ -10,66 +10,98 @@ import ArticleDetails from "../pages/ArticleDetails/ArticleDetails";
 import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 import Subscription from "../pages/Subscription/Subscription";
 import Payment from "../pages/Payment/Payment";
-import PrivateRoutes from "../providers/PrivateRoutes";
+import PrivateRoutes from "./PrivateRoutes";
 import MyProfile from "../pages/MyProfile/MyProfile";
 import MyArticles from "../pages/MyArticles/MyArticles";
 import Update from "../pages/Update/Update";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: '/',
-                element: <Home />,
-            },
-            {
-                path: '/login',
-                element: <Login />,
-            },
-            {
-                path: '/signUp',
-                element: <SignUp />
-            },
-            {
-                path: '/addArticles',
-                element: <PrivateRoutes><AddArticles /></PrivateRoutes>,
-            },
-            {
-                path: '/allArticles',
-                element: <AllArticles />,
-            },
-            {
-                path: '/details/:id',
-                element: <PrivateRoutes><ArticleDetails /></PrivateRoutes>,
-            },
-            {
-                path: '/subscription',
-                element: <PrivateRoutes><Subscription /></PrivateRoutes>,
-            },
-            {
-                path: '/premiumArticles',
-                element: <PrivateRoutes><PremiumArticles /></PrivateRoutes>,
-            },
-            {
-                path: '/payment',
-                element: <PrivateRoutes><Payment /></PrivateRoutes>
-            },
-            {
-                path: '/myProfile',
-                element: <PrivateRoutes><MyProfile /></PrivateRoutes>,
-            },
-            {
-                path: '/myArticles',
-                element: <PrivateRoutes><MyArticles /></PrivateRoutes>,
-            },
-            {
-                path: '/update/:id',
-                element: <PrivateRoutes><Update /></PrivateRoutes>,
-            }
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signUp",
+        element: <SignUp />,
+      },
+      {
+        path: "/addArticles",
+        element: (
+          <PrivateRoutes>
+            <AddArticles />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/allArticles",
+        element: <AllArticles />,
+      },
+      {
+        path: "/details/:id",
+        element: (
+          <PrivateRoutes>
+            <ArticleDetails />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/subscription",
+        element: (
+          <PrivateRoutes>
+            <Subscription />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/premiumArticles",
+        element: (
+          <PrivateRoutes>
+            <PremiumArticles />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/payment",
+        element: (
+          <PrivateRoutes>
+            <Payment />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/myProfile",
+        element: (
+          <PrivateRoutes>
+            <MyProfile />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/myArticles",
+        element: (
+          <PrivateRoutes>
+            <MyArticles />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/update/:id",
+        element: (
+          <PrivateRoutes>
+            <Update />
+          </PrivateRoutes>
+        ),
+      },
+    ],
+  },
+]);
 export default router;
