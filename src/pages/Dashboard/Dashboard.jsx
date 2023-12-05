@@ -8,7 +8,7 @@ const Dashboard = () => {
                 <Link to={'/dashboard/allArticles'} className="py-2 px-10 border ">All Articles</Link>
                 <Link to={'/dashboard/addPublisher'} className="py-2 px-10 border ">Add Publisher</Link>
             </div>
-            <div className="flex items-center justify-center mr-12 w-full my-10">
+            <div className="flex items-center justify-center mr-12 flex-1 my-10">
                 <Outlet />
             </div>
         </div>
